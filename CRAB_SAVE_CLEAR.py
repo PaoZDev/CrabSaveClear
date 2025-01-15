@@ -1,19 +1,18 @@
 import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
-from tkinter import *
-from tkinter import PhotoImage
 import customtkinter
 import keyboard
 import threading
 from send2trash import send2trash
 import winsound
+import json
+import PIL
+
 import ctypes
 import sys
-import matplotlib.pyplot as plt
-from pyfonts import load_font
-import PIL
-from PIL import Image
+
+CONFIG_FILE = 'config.json'
 
 # def is_admin():
 #     """Check if the script is running as an administrator."""
@@ -51,10 +50,8 @@ def move_files_to_trash_recursive(folder_path, prefix):
             for file_name in filenames:
                 if file_name.startswith(prefix):
                     file_path = os.path.join(dirpath, file_name).replace("/", "\\")
-                    print(file_path)
                     if os.path.isfile(file_path):  # Ensure it's a file
                         send2trash(file_path)
-
                         trashed_count += 1
 
         winsound.PlaySound("SystemAsterisk", winsound.MB_OK)
@@ -95,11 +92,37 @@ def run_hotkey_listener():
     """Keep the hotkey listener running in a separate thread."""
     keyboard.wait()
 
+def save_config():
+    config['folder'] = folder_path_var.get()
+    config['prefix'] = prefix_var.get()
+    config['hotkey'] = hotkey_var.get()
+    with open(CONFIG_FILE, 'w') as file:
+        json.dump(config, file, indent = 4)
 
-#  load font from Github
-# font = load_font(
-#    font_url="D:\[DEV]\CRAB SAVE CLEAR\RobotoSlab-Regular.ttf"
-# )
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as file:
+            config = json.load(file)
+            print(config)
+            folder_path_var.set(config["folder"])
+            prefix_var.set(config["prefix"])
+            hotkey_var.set(config["hotkey"])
+            if hotkey_var.get():
+                current_hotkey = hotkey_var.get()
+                try:
+                    keyboard.add_hotkey(current_hotkey, delete_files)
+                except Exception as e:
+                    messagebox.showerror("Error", f"Hotkey: {e}")
+            return config
+    else:
+        return {}
+
+def on_closing():
+   # Save the window position when the application is closed
+   save_config()
+    
+   # Destroy the root window
+   root.destroy()
 
 # Dark mode
 customtkinter.set_appearance_mode("dark")
@@ -108,6 +131,8 @@ customtkinter.set_appearance_mode("dark")
 root = customtkinter.CTk()
 root.title("Save Clear")
 root.geometry("500x350")
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
 
 # set minimum window size value
 root.minsize(500, 350)
@@ -119,7 +144,7 @@ root.maxsize(500, 350)
 my_font = customtkinter.CTkFont(family='Roboto Slab Medium', size=30)
 
 # Create a bg label
-image = PIL.Image.open("D:/[DEV]/CRAB SAVE CLEAR/NACRE.png")
+image = PIL.Image.open("NACRE.png")
 background_image = customtkinter.CTkImage(image, size=(500, 350))
 bg_lbl = customtkinter.CTkLabel(root, text="", image=background_image)
 bg_lbl.place(x=0, y=0)
@@ -129,6 +154,9 @@ folder_path_var = tk.StringVar()
 prefix_var = tk.StringVar()
 hotkey_var = tk.StringVar()
 current_hotkey = None
+
+config = load_config()
+print(config)
 
 my_label = customtkinter.CTkLabel(root, text="Folder Path", font = my_font)
 my_label.pack(pady=0)
