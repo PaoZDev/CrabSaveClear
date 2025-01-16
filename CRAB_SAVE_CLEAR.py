@@ -8,6 +8,9 @@ from send2trash import send2trash
 import winsound
 import json
 import PIL
+from pathlib import Path
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+
 
 import ctypes
 import sys
@@ -124,64 +127,207 @@ def on_closing():
    # Destroy the root window
    root.destroy()
 
-# Dark mode
-customtkinter.set_appearance_mode("dark")
 
-# Create the main GUI window
-root = customtkinter.CTk()
-root.title("Save Clear")
-root.geometry("500x350")
 
-root.protocol("WM_DELETE_WINDOW", on_closing)
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path(r"D:\[DEV]\CrabSaveClear\build\assets\frame0")
 
-# set minimum window size value
-root.minsize(500, 350)
- 
-# set maximum window size value
-root.maxsize(500, 350)
 
-# Custom Font
-my_font = customtkinter.CTkFont(family='Roboto Slab Medium', size=30)
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
 
-# Create a bg label
-image = PIL.Image.open("NACRE.png")
-background_image = customtkinter.CTkImage(image, size=(500, 350))
-bg_lbl = customtkinter.CTkLabel(root, text="", image=background_image)
-bg_lbl.place(x=0, y=0)
 
-# Folder path input
-folder_path_var = tk.StringVar()
-prefix_var = tk.StringVar()
-hotkey_var = tk.StringVar()
-current_hotkey = None
+window = Tk()
 
-config = load_config()
-print(config)
+window.geometry("500x300")
+window.configure(bg = "#FFFFFF")
 
-my_label = customtkinter.CTkLabel(root, text="Folder Path", font = my_font)
-my_label.pack(pady=0)
 
-folder_frame = tk.Frame(root)
-folder_frame.pack(pady=2)
-tk.Entry(folder_frame, textvariable=folder_path_var, width=40).pack(side=tk.LEFT, padx=5)
-tk.Button(folder_frame, text="Browse", command=browse_folder).pack(side=tk.LEFT)
+canvas = Canvas(
+    window,
+    bg = "#FFFFFF",
+    height = 300,
+    width = 500,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge"
+)
 
-# Prefix input
-tk.Label(root, text="File Prefix:").pack(pady=5)
-tk.Entry(root, textvariable=prefix_var, width=40).pack(pady=5)
+canvas.place(x = 0, y = 0)
+image_image_1 = PhotoImage(
+    file=relative_to_assets("image_1.png"))
+image_1 = canvas.create_image(
+    250.0,
+    150.0,
+    image=image_image_1
+)
 
-# Hotkey input
-tk.Label(root, text="Set Global Hotkey:").pack(pady=5)
-hotkey_frame = tk.Frame(root)
-hotkey_frame.pack(pady=5)
-tk.Entry(hotkey_frame, textvariable=hotkey_var, width=20).pack(side=tk.LEFT, padx=5)
-tk.Button(hotkey_frame, text="Set Hotkey", command=set_hotkey).pack(side=tk.LEFT)
+button_image_1 = PhotoImage(
+    file=relative_to_assets("button_1.png"))
+button_1 = Button(
+    image=button_image_1,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("button_1 clicked"),
+    relief="flat"
+)
+button_1.place(
+    x=237.0,
+    y=162.0,
+    width=46.0,
+    height=14.0
+)
 
-# Delete button
-tk.Button(root, text="Move Files to Trash", command=delete_files, bg="blue", fg="white").pack(pady=20)
+entry_image_1 = PhotoImage(
+    file=relative_to_assets("entry_1.png"))
+entry_bg_1 = canvas.create_image(
+    129.5,
+    169.0,
+    image=entry_image_1
+)
+entry_1 = Text(
+    bd=0,
+    bg="#CFCFCF",
+    fg="#000716",
+    highlightthickness=0
+)
+entry_1.place(
+    x=37.0,
+    y=159.0,
+    width=185.0,
+    height=18.0
+)
 
-# Start the hotkey listener in a separate thread
-threading.Thread(target=run_hotkey_listener, daemon=True).start()
+canvas.create_text(
+    27.0,
+    138.0,
+    anchor="nw",
+    text="Folder Path",
+    fill="#DFD1BD",
+    font=("LoewNext Bold", 14 * -1)
+)
 
-# Run the GUI
-root.mainloop()
+entry_image_2 = PhotoImage(
+    file=relative_to_assets("entry_2.png"))
+entry_bg_2 = canvas.create_image(
+    129.5,
+    217.0,
+    image=entry_image_2
+)
+entry_2 = Text(
+    bd=0,
+    bg="#CFCFCF",
+    fg="#000716",
+    highlightthickness=0
+)
+entry_2.place(
+    x=37.0,
+    y=207.0,
+    width=185.0,
+    height=18.0
+)
+
+canvas.create_text(
+    23.0,
+    186.0,
+    anchor="nw",
+    text="File Prefix",
+    fill="#DFD1BD",
+    font=("LoewNext Bold", 14 * -1)
+)
+
+button_image_2 = PhotoImage(
+    file=relative_to_assets("button_2.png"))
+button_2 = Button(
+    image=button_image_2,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("button_2 clicked"),
+    relief="flat"
+)
+button_2.place(
+    x=237.0,
+    y=258.0,
+    width=46.0,
+    height=13.0
+)
+
+canvas.create_text(
+    19.0,
+    235.0,
+    anchor="nw",
+    text="Global Hotkey",
+    fill="#DFD1BD",
+    font=("LoewNext Bold", 14 * -1)
+)
+
+entry_image_3 = PhotoImage(
+    file=relative_to_assets("entry_3.png"))
+entry_bg_3 = canvas.create_image(
+    129.5,
+    265.0,
+    image=entry_image_3
+)
+entry_3 = Text(
+    bd=0,
+    bg="#CFCFCF",
+    fg="#000716",
+    highlightthickness=0
+)
+entry_3.place(
+    x=37.0,
+    y=255.0,
+    width=185.0,
+    height=18.0
+)
+
+button_image_3 = PhotoImage(
+    file=relative_to_assets("button_3.png"))
+button_3 = Button(
+    image=button_image_3,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("button_3 clicked"),
+    relief="flat"
+)
+button_3.place(
+    x=341.0,
+    y=86.0,
+    width=118.0,
+    height=131.0
+)
+
+image_image_2 = PhotoImage(
+    file=relative_to_assets("image_2.png"))
+image_2 = canvas.create_image(
+    465.0,
+    288.0,
+    image=image_image_2
+)
+
+image_image_3 = PhotoImage(
+    file=relative_to_assets("image_3.png"))
+image_3 = canvas.create_image(
+    490.0,
+    288.0,
+    image=image_image_3
+)
+
+canvas.create_text(
+    475.0,
+    285.0,
+    anchor="nw",
+    text="x",
+    fill="#FFFFFF",
+    font=("Lato Regular", 8 * -1)
+)
+
+image_image_4 = PhotoImage(
+    file=relative_to_assets("image_4.png"))
+image_4 = canvas.create_image(
+    110.0,
+    64.0,
+    image=image_image_4
+)
+window.resizable(False, False)
+window.mainloop()
