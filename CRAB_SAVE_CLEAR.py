@@ -1,16 +1,12 @@
 import os
 import tkinter as tk
-from tkinter import filedialog, messagebox
-import customtkinter
+from tkinter import filedialog, messagebox, Canvas, Entry, Text, Button, PhotoImage
 import keyboard
 import threading
 from send2trash import send2trash
 import winsound
 import json
 import PIL
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
 
 import ctypes
 import sys
@@ -127,24 +123,28 @@ def on_closing():
    save_config()
     
    # Destroy the root window
-   root.destroy()
+   window.destroy()
 
+def relative_to_assets(path: str):
+    # return os.path.dirname(__file__) / "build/assets/frame0" / path
+    return os.path.join(os.path.dirname(__file__), "build/assets/frame0/", path).replace("/", "\\")
 
+window = tk.Tk()
+window.title("Save Clear")
+window.geometry("500x300")
+window.configure(bg = "#FFFFFF")
+window.resizable(False, False)
+window.protocol("WM_DELETE_WINDOW", on_closing)
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"D:\[DEV]\CrabSaveClear\build\assets\frame0")
-
-
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+# Folder path input
+folder_path_var = tk.StringVar()
+prefix_var = tk.StringVar()
+hotkey_var = tk.StringVar()
+current_hotkey = None
 
 config = load_config()
 
-window = Tk()
-window.geometry("500x300")
-window.configure(bg = "#FFFFFF")
-
-
+print(relative_to_assets("image_1.png"))
 
 canvas = Canvas(
     window,
@@ -156,6 +156,7 @@ canvas = Canvas(
     relief = "ridge"
 )
 
+# bg
 canvas.place(x = 0, y = 0)
 image_image_1 = PhotoImage(
     file=relative_to_assets("image_1.png"))
@@ -165,13 +166,14 @@ image_1 = canvas.create_image(
     image=image_image_1
 )
 
+# Browse btn
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
 button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
+    command=browse_folder,
     relief="flat"
 )
 button_1.place(
@@ -181,6 +183,7 @@ button_1.place(
     height=14.0
 )
 
+# Browse input
 entry_image_1 = PhotoImage(
     file=relative_to_assets("entry_1.png"))
 entry_bg_1 = canvas.create_image(
@@ -188,11 +191,12 @@ entry_bg_1 = canvas.create_image(
     169.0,
     image=entry_image_1
 )
-entry_1 = Text(
+entry_1 = Entry(
     bd=0,
     bg="#CFCFCF",
     fg="#000716",
-    highlightthickness=0
+    highlightthickness=0,
+    textvariable=folder_path_var
 )
 entry_1.place(
     x=37.0,
@@ -217,11 +221,12 @@ entry_bg_2 = canvas.create_image(
     217.0,
     image=entry_image_2
 )
-entry_2 = Text(
+entry_2 = Entry(
     bd=0,
     bg="#CFCFCF",
     fg="#000716",
-    highlightthickness=0
+    highlightthickness=0,
+    textvariable=prefix_var
 )
 entry_2.place(
     x=37.0,
@@ -245,7 +250,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command=set_hotkey,
     relief="flat"
 )
 button_2.place(
@@ -271,11 +276,12 @@ entry_bg_3 = canvas.create_image(
     265.0,
     image=entry_image_3
 )
-entry_3 = Text(
+entry_3 = Entry(
     bd=0,
     bg="#CFCFCF",
     fg="#000716",
-    highlightthickness=0
+    highlightthickness=0,
+    textvariable=hotkey_var
 )
 entry_3.place(
     x=37.0,
@@ -290,7 +296,7 @@ button_3 = Button(
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_3 clicked"),
+    command=delete_files,
     relief="flat"
 )
 button_3.place(
@@ -332,5 +338,9 @@ image_4 = canvas.create_image(
     64.0,
     image=image_image_4
 )
-window.resizable(False, False)
+
+# Start the hotkey listener in a separate thread
+threading.Thread(target=run_hotkey_listener, daemon=True).start()
+
+# Run the GUI
 window.mainloop()
