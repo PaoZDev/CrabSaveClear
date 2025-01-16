@@ -15,21 +15,22 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import ctypes
 import sys
 
-CONFIG_FILE = 'config.json'
+DIR_PATH = os.path.dirname(__file__)
+CONFIG_FILE = os.path.join(DIR_PATH, 'crab_save_clear_config.json')
 
-# def is_admin():
-#     """Check if the script is running as an administrator."""
-#     try:
-#         return ctypes.windll.shell32.IsUserAnAdmin()
-#     except:
-#         return False
+def is_admin():
+    """Check if the script is running as an administrator."""
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
 
-# if not is_admin():
-#     # Re-run the script with administrator privileges
-#     ctypes.windll.shell32.ShellExecuteW(
-#         None, "runas", sys.executable, " ".join(sys.argv), None, 1
-#     )
-#     sys.exit()
+if not is_admin():
+    # Re-run the script with administrator privileges
+    ctypes.windll.shell32.ShellExecuteW(
+        None, "runas", sys.executable, " ".join(sys.argv), None, 1
+    )
+    sys.exit()
 
 def move_files_to_trash_recursive(folder_path, prefix):
     """
@@ -104,6 +105,7 @@ def save_config():
 
 def load_config():
     if os.path.exists(CONFIG_FILE):
+        print(os.path.abspath(CONFIG_FILE))
         with open(CONFIG_FILE, 'r') as file:
             config = json.load(file)
             print(config)
@@ -136,11 +138,12 @@ ASSETS_PATH = OUTPUT_PATH / Path(r"D:\[DEV]\CrabSaveClear\build\assets\frame0")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+config = load_config()
 
 window = Tk()
-
 window.geometry("500x300")
 window.configure(bg = "#FFFFFF")
+
 
 
 canvas = Canvas(
