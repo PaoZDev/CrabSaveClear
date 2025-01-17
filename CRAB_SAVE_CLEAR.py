@@ -1,18 +1,28 @@
 import os
 import tkinter as tk
-from tkinter import filedialog, messagebox, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import filedialog, messagebox, Canvas, Entry, Button, PhotoImage
+from tkinter import *
 import keyboard
 import threading
 from send2trash import send2trash
 import winsound
 import json
-import PIL
-
-import ctypes
 import sys
 
-DIR_PATH = os.path.dirname(__file__)
-CONFIG_FILE = os.path.join(DIR_PATH, 'crab_save_clear_config.json')
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path).replace("/", "\\")
+
+def relative_to_assets(filename):
+    relative_path = filename
+
+    return resource_path(relative_path)
+
+CONFIG_FILE = resource_path("crab_save_clear_config.json")
 
 # def is_admin():
 #     """Check if the script is running as an administrator."""
@@ -125,9 +135,8 @@ def on_closing():
    # Destroy the root window
    window.destroy()
 
-def relative_to_assets(path: str):
-    # return os.path.dirname(__file__) / "build/assets/frame0" / path
-    return os.path.join(os.path.dirname(__file__), "GUI V2/Build/assets/frame0/", path).replace("/", "\\")
+
+
 
 window = tk.Tk()
 window.title("Save Clear")
@@ -165,15 +174,18 @@ image_1 = canvas.create_image(
     image=image_image_1
 )
 
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
+
+button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
 button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=browse_folder,
-    relief="flat"
+    window,
+    image=button_image_1, 
+    command=browse_folder, 
+    borderwidth=0, 
+    background="#0CADEC", 
+    activebackground="#0CADEC"
+
 )
+
 button_1.place(
     x=370.8248291015625,
     y=264.0,
@@ -268,14 +280,14 @@ entry_3.place(
     height=20.0
 )
 
-button_image_2 = PhotoImage(
-    file=relative_to_assets("button_2.png"))
+button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
 button_2 = Button(
-    image=button_image_2,
-    borderwidth=0,
-    highlightthickness=0,
-    command=set_hotkey,
-    relief="flat"
+    window,
+    image=button_image_2, 
+    command=set_hotkey, 
+    borderwidth=0, 
+    background="#22bcf5", 
+    activebackground="#22bcf5"
 )
 button_2.place(
     x=371.0,
@@ -284,14 +296,14 @@ button_2.place(
     height=27.0
 )
 
-button_image_3 = PhotoImage(
-    file=relative_to_assets("button_3.png"))
+button_image_3 = PhotoImage(file=relative_to_assets("button_3.png"))
 button_3 = Button(
-    image=button_image_3,
-    borderwidth=0,
-    highlightthickness=0,
-    command=delete_files,
-    relief="flat"
+    window,
+    image=button_image_3, 
+    command=delete_files, 
+    borderwidth=0, 
+    background="#09abeb", 
+    activebackground="#09abeb"
 )
 button_3.place(
     x=477.0,
