@@ -8,6 +8,22 @@ from send2trash import send2trash
 import winsound
 import json
 import sys
+# import ctypes
+
+
+# def is_admin():
+#     """Check if the script is running as an administrator."""
+#     try:
+#         return ctypes.windll.shell32.IsUserAnAdmin()
+#     except:
+#         return False
+
+# if not is_admin():
+#     # Re-run the script with administrator privileges
+#     ctypes.windll.shell32.ShellExecuteW(
+#         None, "runas", sys.executable, " ".join(sys.argv), None, 1
+#     )
+#     sys.exit()
 
 def resource_path(filename):
     try:
@@ -28,19 +44,7 @@ def relative_to_assets(filename):
 
 CONFIG_FILE = resource_path('crab_save_clear_config.json')
 
-# def is_admin():
-#     """Check if the script is running as an administrator."""
-#     try:
-#         return ctypes.windll.shell32.IsUserAnAdmin()
-#     except:
-#         return False
 
-# if not is_admin():
-#     # Re-run the script with administrator privileges
-#     ctypes.windll.shell32.ShellExecuteW(
-#         None, "runas", sys.executable, " ".join(sys.argv), None, 1
-#     )
-#     sys.exit()
 
 def move_files_to_trash_recursive(folder_path, prefix):
     """
