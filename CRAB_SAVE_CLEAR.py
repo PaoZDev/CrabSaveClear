@@ -1,18 +1,15 @@
 import os
 import tkinter as tk
-from tkinter import filedialog, messagebox, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import filedialog, messagebox, Canvas, Entry, Button, PhotoImage
+from tkinter import *
 import keyboard
 import threading
 from send2trash import send2trash
 import winsound
 import json
-import PIL
-
-import ctypes
 import sys
 
-DIR_PATH = os.path.dirname(__file__)
-CONFIG_FILE = os.path.join(DIR_PATH, 'crab_save_clear_config.json')
+# import ctypes
 
 # def is_admin():
 #     """Check if the script is running as an administrator."""
@@ -27,6 +24,37 @@ CONFIG_FILE = os.path.join(DIR_PATH, 'crab_save_clear_config.json')
 #         None, "runas", sys.executable, " ".join(sys.argv), None, 1
 #     )
 #     sys.exit()
+
+def resource_path(filename):
+    try:
+        base_path = sys._MEIPASS
+        base_path = os.path.abspath(".")
+    except Exception:
+        base_path = os.path.dirname(__file__)
+
+    return os.path.join(base_path, filename).replace("/", "\\")
+
+def relative_to_assets(filename):
+    try:
+        base_path = sys._MEIPASS
+        base_path = os.path.join(base_path, "CrabSaveClear")
+    except Exception:
+        base_path =  os.path.join(os.path.dirname(__file__), "assets/")
+
+    return os.path.join(base_path, filename).replace("/", "\\")
+
+def relative_to_exe(filename):
+    try:
+        base_path = sys._MEIPASS
+        base_path = os.path.join(base_path, "CrabSaveClear")
+    except Exception:
+        base_path = os.path.dirname(__file__)
+
+    return os.path.join(base_path, filename).replace("/", "\\")
+
+
+CONFIG_FILE = resource_path('crab_save_clear_config.json')
+
 
 def move_files_to_trash_recursive(folder_path, prefix):
     """
@@ -85,8 +113,12 @@ def set_hotkey():
 
     # Register the new hotkey
     current_hotkey = hotkey
-    keyboard.add_hotkey(hotkey, delete_files)
-    messagebox.showinfo("Hotkey Set", f"Hotkey '{hotkey}' is now active for moving files to trash.")
+    try:
+        keyboard.add_hotkey(hotkey, delete_files)
+        messagebox.showinfo("Hotkey Set", f"Hotkey '{hotkey}' is now active for moving files to trash.")
+    except Exception as e:
+        current_hotkey = ""
+        messagebox.showerror("Hotkey Set", e)
 
 def run_hotkey_listener():
     """Keep the hotkey listener running in a separate thread."""
@@ -96,12 +128,15 @@ def save_config():
     config['folder'] = folder_path_var.get()
     config['prefix'] = prefix_var.get()
     config['hotkey'] = hotkey_var.get()
+    print("config saved:")
+    print(CONFIG_FILE)
     with open(CONFIG_FILE, 'w') as file:
         json.dump(config, file, indent = 4)
 
 def load_config():
+    print("load config:")
+    print(CONFIG_FILE)
     if os.path.exists(CONFIG_FILE):
-        print(os.path.abspath(CONFIG_FILE))
         with open(CONFIG_FILE, 'r') as file:
             config = json.load(file)
             print(config)
@@ -125,14 +160,12 @@ def on_closing():
    # Destroy the root window
    window.destroy()
 
-def relative_to_assets(path: str):
-    # return os.path.dirname(__file__) / "build/assets/frame0" / path
-    return os.path.join(os.path.dirname(__file__), "GUI V2/Build/assets/frame0/", path).replace("/", "\\")
 
 window = tk.Tk()
-window.title("Save Clear")
+window.iconbitmap(relative_to_exe("app.ico"))
+window.title("Crab Save Clear")
 window.geometry("700x500")
-window.configure(bg = "#FFFFFF")
+window.configure(bg = "#0CADEC")
 window.resizable(False, False)
 window.protocol("WM_DELETE_WINDOW", on_closing)
 
@@ -144,11 +177,9 @@ current_hotkey = None
 
 config = load_config()
 
-print(relative_to_assets("image_1.png"))
-
 canvas = Canvas(
     window,
-    bg = "#FFFFFF",
+    bg = "#22bcf5",
     height = 500,
     width = 700,
     bd = 0,
@@ -165,15 +196,18 @@ image_1 = canvas.create_image(
     image=image_image_1
 )
 
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
+
+button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
 button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=browse_folder,
-    relief="flat"
+    window,
+    image=button_image_1, 
+    command=browse_folder, 
+    borderwidth=0, 
+    background="#0CADEC", 
+    activebackground="#0CADEC"
+
 )
+
 button_1.place(
     x=370.8248291015625,
     y=264.0,
@@ -268,14 +302,14 @@ entry_3.place(
     height=20.0
 )
 
-button_image_2 = PhotoImage(
-    file=relative_to_assets("button_2.png"))
+button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
 button_2 = Button(
-    image=button_image_2,
-    borderwidth=0,
-    highlightthickness=0,
-    command=set_hotkey,
-    relief="flat"
+    window,
+    image=button_image_2, 
+    command=set_hotkey, 
+    borderwidth=0, 
+    background="#22bcf5", 
+    activebackground="#22bcf5"
 )
 button_2.place(
     x=371.0,
@@ -284,14 +318,14 @@ button_2.place(
     height=27.0
 )
 
-button_image_3 = PhotoImage(
-    file=relative_to_assets("button_3.png"))
+button_image_3 = PhotoImage(file=relative_to_assets("button_3.png"))
 button_3 = Button(
-    image=button_image_3,
-    borderwidth=0,
-    highlightthickness=0,
-    command=delete_files,
-    relief="flat"
+    window,
+    image=button_image_3, 
+    command=delete_files, 
+    borderwidth=0, 
+    background="#09abeb", 
+    activebackground="#09abeb"
 )
 button_3.place(
     x=477.0,
