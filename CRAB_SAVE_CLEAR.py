@@ -1,7 +1,6 @@
 import os
 import tkinter as tk
 from tkinter import filedialog, messagebox, Canvas, Entry, Button, PhotoImage
-from tkinter import *
 import keyboard
 import threading
 from send2trash import send2trash

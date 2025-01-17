@@ -23,6 +23,7 @@ exe = EXE(
     a.datas,
     [],
     name='CrabSaveClear',
+    version='0.0.1',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
