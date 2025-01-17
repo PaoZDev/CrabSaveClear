@@ -6,7 +6,7 @@
 Clear your saves in the game "Another Crab's Treasure". Use a hotkey or the clear button to move all the save to the trash bin.
 
 <p align="center">
-  <img src="preview.png" alt="preview of the app on windows" />
+  <img width="500px" height="700px" src="preview.png" alt="preview of the app on windows" />
 </p>
 
 ## Usage
@@ -32,13 +32,13 @@ Python and pip must be installed in your computer.
 ## Build EXE Instructions
 
 Install pyinstaller
-`pip install pyinstaller`
+- `pip install pyinstaller`
 
 Build from spec
-`pyinstaller CrabSaveClear.spec`
+- `pyinstaller CrabSaveClear.spec`
 
 Build
-`pyinstaller --onefile --windowed --noconsole --clean --icon=app.ico --name CrabSaveClear CRAB_SAVE_CLEAR.py`
+- `pyinstaller --onefile --windowed --noconsole --clean --icon=app.ico --name CrabSaveClear CRAB_SAVE_CLEAR.py`
 
 ## License
 This project is licensed - see the LICENSE file for details
