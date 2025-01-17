@@ -20,7 +20,7 @@ To retrive your files the are moved to the system bin
 
 ## Download
 
-**Download the lastest version from the dist folder or the [Releases page](https://github.com/PaoZDev/CrabSaveClear/releases).**
+**Download the lastest version from the [dist folder](https://github.com/PaoZDev/CrabSaveClear/raw/refs/heads/main/dist/CrabSaveClear.exe) or the [Releases page](https://github.com/PaoZDev/CrabSaveClear/releases).**
 
 
 ## Installation
