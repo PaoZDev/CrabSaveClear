@@ -107,10 +107,15 @@ def save_config():
     config['folder'] = folder_path_var.get()
     config['prefix'] = prefix_var.get()
     config['hotkey'] = hotkey_var.get()
+    print("config saved:")
+    print(CONFIG_FILE)
     with open(CONFIG_FILE, 'w') as file:
         json.dump(config, file, indent = 4)
 
 def load_config():
+    print("load config:")
+    print(CONFIG_FILE)
+    print(os.path.exists(CONFIG_FILE))
     if os.path.exists(CONFIG_FILE):
         print(os.path.abspath(CONFIG_FILE))
         with open(CONFIG_FILE, 'r') as file:
