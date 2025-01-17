@@ -8,8 +8,8 @@ from send2trash import send2trash
 import winsound
 import json
 import sys
-# import ctypes
 
+# import ctypes
 
 # def is_admin():
 #     """Check if the script is running as an administrator."""
@@ -30,20 +30,30 @@ def resource_path(filename):
         base_path = sys._MEIPASS
         base_path = os.path.abspath(".")
     except Exception:
-        base_path = os.path.abspath(os.path.dirname(__file__))
+        base_path = os.path.dirname(__file__)
 
     return os.path.join(base_path, filename).replace("/", "\\")
 
 def relative_to_assets(filename):
     try:
         base_path = sys._MEIPASS
+        base_path = os.path.join(base_path, "CrabSaveClear")
     except Exception:
-        base_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "assets/")
+        base_path =  os.path.join(os.path.dirname(__file__), "assets/")
 
     return os.path.join(base_path, filename).replace("/", "\\")
 
-CONFIG_FILE = resource_path('crab_save_clear_config.json')
+def relative_to_exe(filename):
+    try:
+        base_path = sys._MEIPASS
+        base_path = os.path.join(base_path, "CrabSaveClear")
+    except Exception:
+        base_path = os.path.dirname(__file__)
 
+    return os.path.join(base_path, filename).replace("/", "\\")
+
+
+CONFIG_FILE = resource_path('crab_save_clear_config.json')
 
 
 def move_files_to_trash_recursive(folder_path, prefix):
@@ -103,8 +113,12 @@ def set_hotkey():
 
     # Register the new hotkey
     current_hotkey = hotkey
-    keyboard.add_hotkey(hotkey, delete_files)
-    messagebox.showinfo("Hotkey Set", f"Hotkey '{hotkey}' is now active for moving files to trash.")
+    try:
+        keyboard.add_hotkey(hotkey, delete_files)
+        messagebox.showinfo("Hotkey Set", f"Hotkey '{hotkey}' is now active for moving files to trash.")
+    except Exception as e:
+        current_hotkey = ""
+        messagebox.showerror("Hotkey Set", e)
 
 def run_hotkey_listener():
     """Keep the hotkey listener running in a separate thread."""
@@ -123,7 +137,6 @@ def load_config():
     print("load config:")
     print(CONFIG_FILE)
     if os.path.exists(CONFIG_FILE):
-        print(os.path.abspath(CONFIG_FILE))
         with open(CONFIG_FILE, 'r') as file:
             config = json.load(file)
             print(config)
@@ -148,12 +161,11 @@ def on_closing():
    window.destroy()
 
 
-
-
 window = tk.Tk()
-window.title("Save Clear")
+window.iconbitmap(relative_to_exe("app.ico"))
+window.title("Crab Save Clear")
 window.geometry("700x500")
-window.configure(bg = "#FFFFFF")
+window.configure(bg = "#0CADEC")
 window.resizable(False, False)
 window.protocol("WM_DELETE_WINDOW", on_closing)
 
@@ -165,11 +177,9 @@ current_hotkey = None
 
 config = load_config()
 
-print(relative_to_assets("image_1.png"))
-
 canvas = Canvas(
     window,
-    bg = "#FFFFFF",
+    bg = "#22bcf5",
     height = 500,
     width = 700,
     bd = 0,
