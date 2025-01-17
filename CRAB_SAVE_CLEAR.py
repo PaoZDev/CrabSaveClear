@@ -10,18 +10,21 @@ import json
 import sys
 
 def resource_path(filename):
-    base_path = os.path.abspath(os.path.dirname(__file__))
+    try:
+        base_path = sys._MEIPASS
+        base_path = os.path.abspath(".")
+    except Exception:
+        base_path = os.path.abspath(os.path.dirname(__file__))
 
     return os.path.join(base_path, filename).replace("/", "\\")
 
 def relative_to_assets(filename):
     try:
-        base_path = sys._MEIPASS2
+        base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "assets/")
 
     return os.path.join(base_path, filename).replace("/", "\\")
-
 
 CONFIG_FILE = resource_path('crab_save_clear_config.json')
 
@@ -115,7 +118,6 @@ def save_config():
 def load_config():
     print("load config:")
     print(CONFIG_FILE)
-    print(os.path.exists(CONFIG_FILE))
     if os.path.exists(CONFIG_FILE):
         print(os.path.abspath(CONFIG_FILE))
         with open(CONFIG_FILE, 'r') as file:
