@@ -6,7 +6,7 @@
 Clear your saves in the game "Another Crab's Treasure". Use a hotkey or the clear button to move all the save to the trash bin.
 
 <p align="center">
-  <img src="imgs/preview.png" alt="preview of the app on windows" />
+  <img src="preview.png" alt="preview of the app on windows" />
 </p>
 
 ## Usage
