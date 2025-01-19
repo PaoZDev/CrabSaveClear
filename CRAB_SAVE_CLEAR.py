@@ -161,7 +161,7 @@ def on_closing():
 
 
 window = tk.Tk()
-window.iconbitmap(relative_to_exe("app.ico"))
+window.iconbitmap(window, relative_to_exe("app.ico"))
 window.title("Crab Save Clear")
 window.geometry("700x500")
 window.configure(bg = "#0CADEC")
