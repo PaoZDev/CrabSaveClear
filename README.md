@@ -51,6 +51,12 @@ To build the executable, follow these steps:
    pyinstaller --onefile --windowed --noconsole --clean --icon=app.ico --name CrabSaveClear CRAB_SAVE_CLEAR.py
    ```
 
+## App Icon
+
+1. Use [ICON PRO](https://github.com/HerbertLausmann/HL.IconPro) to make the app.ico file
+2. Rebuild the app
+3. If the icon is not updating use the script `Win_Rebuild_Icon_Cache.bat` to rebuild Windows icon cache
+
 ## Contribution
 
 Contributions are welcome! Feel free to open an issue or a pull request if you have suggestions or improvements.
