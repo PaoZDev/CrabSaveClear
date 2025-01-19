@@ -8,6 +8,10 @@ import winsound
 import json
 import sys
 
+APP_TITLE = "Crab Save Clear"
+APP_VERSION = "0.0.1"
+APP_ICON = "app.ico"
+
 # import ctypes
 
 # def is_admin():
@@ -161,8 +165,8 @@ def on_closing():
 
 
 window = tk.Tk()
-window.iconbitmap(window, relative_to_exe("app.ico"))
-window.title("Crab Save Clear")
+window.iconbitmap(window, relative_to_exe(APP_ICON))
+window.title(APP_TITLE)
 window.geometry("700x500")
 window.configure(bg = "#0CADEC")
 window.resizable(False, False)
@@ -364,6 +368,9 @@ image_8 = canvas.create_image(
     102.0,
     image=image_image_8
 )
+
+# show app version
+txt_version = canvas.create_text(640, 492, anchor = tk.SE, text=f"v{APP_VERSION}", fill="#038ee9")
 
 # Start the hotkey listener in a separate thread
 threading.Thread(target=run_hotkey_listener, daemon=True).start()
