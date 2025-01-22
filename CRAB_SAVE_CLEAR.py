@@ -9,7 +9,7 @@ import json
 import sys
 
 APP_TITLE = "Crab Save Clear"
-APP_VERSION = "0.0.1"
+APP_VERSION = "1.0.0"
 APP_ICON = "app.ico"
 
 # import ctypes
